@@ -5,6 +5,13 @@ const router = express.Router()
 
 router.get('/', (req, res, next) => {
     try {
+
+        if(req.query.completed !== undefined){
+            const isCompleted = req.query.completed === 'true'
+            const task = tasks.filter(t => t.completed === isCompleted) 
+            return res.json(task)
+        }
+
         res.send(tasks)
     } catch (err) {
         next(err)

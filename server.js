@@ -13,6 +13,8 @@ app.use(logger)
 app.use(cors())
 app.use(express.json())
 
+app.use(express.static('./public'))
+
 app.use('/api/tasks', router)
 
 app.use(errorHandler)

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Handler By Express</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Task Manager</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Add Task</h2>
+            <form id="taskForm" class="task-adder-form">
+                <div>
+                    <label for="taskInput">Task:</label>
+                    <input type="text" name="task" id="taskInput" required>
+                </div>
+                <button type="submit">Add Task</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Your Tasks</h2>
+            <ul id="taskList"></ul>
+        </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+</body>
+
+</html>

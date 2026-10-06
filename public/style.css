@@ -1,0 +1,160 @@
+*,
+::after,
+::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --background-primary-color: #00022E;
+    --btn-BG-color: #3b82f6;
+    --text-color: #ffffff;
+    --input-font-size: 1.3rem;
+    --primary-font-family: sans-serif;
+    --primary-font-size: 1.5rem;
+    --body-font-size: 1rem;
+    --line-height: 1.5;
+}
+
+body {
+    background: var(--background-primary-color);
+    color: var(--text-color);
+    line-height: var(--line-height);
+    font-family: var(--primary-font-family);
+    font-size: var(--body-font-size);
+}
+
+h1,
+h2 {
+    font-size: var(--primary-font-size);
+    text-align: center;
+}
+
+.task-adder-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.task-adder-form label {
+    font-size: 1.2rem;
+}
+
+.task-adder-form input {
+    padding: 0.75rem;
+    font-size: var(--input-font-size);
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.task-adder-form input:focus {
+    outline: 2px solid var(--btn-BG-color);
+}
+
+.task-adder-form button {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: var(--body-font-size);
+    font-weight: bold;
+    background: var(--btn-BG-color);
+    min-height: 44px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+#taskList {
+    list-style: none;
+    padding: 0;
+    margin: 1rem auto;
+    max-width: 400px;
+}
+
+#taskList li {
+    background: #1a1a40;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    font-size: var(--body-font-size);
+}
+
+section {
+    margin: 2rem auto;
+    max-width: 400px;
+    padding: 1rem;
+}
+
+.task-text {
+    flex: 1; /* Takes up all available horizontal space */
+    word-break: break-word; /* Prevents long text without spaces from breaking layout */
+}
+
+#taskList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1a1a40;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0; /* Prevents buttons from squishing when text is long */
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+.edit-btn {
+    background: #f59e0b;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+    transition: background 0.2s ease;
+}
+
+.edit-btn:hover {
+    background: #d97706;
+}
+
+@media (min-width: 768px) {
+    main {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    section {
+        max-width: 500px;
+    }
+}

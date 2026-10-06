@@ -17,9 +17,14 @@
         <section>
             <h2>Add Task</h2>
             <form id="taskForm" class="task-adder-form">
-                <div>
-                    <label for="taskInput">Task:</label>
-                    <input type="text" name="task" id="taskInput" required>
+                <div class="form-group">
+                    <label for="taskInput">Title:</label>
+                    <input type="text" name="title" id="taskInput" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskDesc">Description:</label>
+                    <textarea name="description" id="taskDesc" rows="3"></textarea>
                 </div>
                 <button type="submit">Add Task</button>
             </form>

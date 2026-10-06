@@ -130,6 +130,48 @@ section {
     background: #dc2626;
 }
 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.task-adder-form textarea {
+    padding: 0.75rem;
+    font-size: var(--body-font-size);
+    font-family: var(--primary-font-family);
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
+    background: #ffffff;
+    color: #000000;
+}
+
+.task-adder-form textarea:focus {
+    outline: 2px solid var(--btn-BG-color);
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--btn-BG-color);
+    flex-shrink: 0;
+}
+
+.task-text p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 0.25rem;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
 .edit-btn {
     background: #f59e0b;
     color: white;

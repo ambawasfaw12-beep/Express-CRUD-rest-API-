@@ -11,7 +11,13 @@ const getTask = async () => {
         const li = document.createElement('li')
 
         li.innerHTML = `
-    <span class="task-text">${data.task}</span>
+    <input type="checkbox" class="task-checkbox" ${data.completed ? 'checked' : ''}>
+    
+    <div class="task-text">
+        <h3 class="${data.completed ? 'completed' : ''}">${data.task}</h3>
+        <p>${data.description || ''}</p>
+    </div>
+
     <div class="task-actions">
         <button class="edit-btn">Edit</button>
         <button class="delete-btn">Delete</button>

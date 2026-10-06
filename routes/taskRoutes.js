@@ -6,9 +6,9 @@ const router = express.Router()
 router.get('/', (req, res, next) => {
     try {
 
-        if(req.query.completed !== undefined){
+        if (req.query.completed !== undefined) {
             const isCompleted = req.query.completed === 'true'
-            const task = tasks.filter(t => t.completed === isCompleted) 
+            const task = tasks.filter(t => t.completed === isCompleted)
             return res.json(task)
         }
 
@@ -20,7 +20,12 @@ router.get('/', (req, res, next) => {
 
 router.post('/', validationTask, (req, res, next) => {
     try {
-        const newTask = req.body
+        const newTask = {
+            id: Date.now(),
+            task: req.body.task,
+            description: req.body.description,
+            completed: req.body.completed || false
+        }
         tasks.push(newTask)
         res.status(201).json(newTask)
     } catch (err) {

@@ -1,6 +1,7 @@
 const taskForm = document.getElementById('taskForm')
 const taskInput = document.getElementById('taskInput')
 const taskList = document.getElementById('taskList')
+const taskDesc = document.getElementById('taskDesc')
 
 const getTask = async () => {
     const response = await fetch('/api/tasks')
@@ -28,3 +29,26 @@ const getTask = async () => {
 }
 
 getTask()
+
+taskForm.addEventListener('submit', async event => {
+    event.preventDefault()
+
+    const title = taskInput.value.trim()
+    const desc =  taskDesc.value.trim()
+
+ const response =  await fetch('/api/tasks',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+       body:JSON.stringify({
+        task: title,
+        description: desc
+       }) 
+    })
+
+    if(response.ok){
+     taskForm.reset()
+     getTask()
+    }else{
+        console.log(response.status)
+    }
+})

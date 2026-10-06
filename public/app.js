@@ -3,6 +3,13 @@ const taskInput = document.getElementById('taskInput')
 const taskList = document.getElementById('taskList')
 const taskDesc = document.getElementById('taskDesc')
 
+taskList.addEventListener('click', event=>{
+    if(event.target.classList.contains('delete-btn')){
+        const id = event.target.dataset.id
+deleteTask(id)
+    }
+})
+
 const getTask = async () => {
     const response = await fetch('/api/tasks')
     const datas = await response.json()
@@ -20,8 +27,8 @@ const getTask = async () => {
     </div>
 
     <div class="task-actions">
-        <button class="edit-btn">Edit</button>
-        <button class="delete-btn">Delete</button>
+        <button class="edit-btn" data-id="${data.id}">Edit</button>
+        <button class="delete-btn" data-id="${data.id}">Delete</button>
     </div>
         `
         taskList.appendChild(li)
@@ -52,3 +59,15 @@ taskForm.addEventListener('submit', async event => {
         console.log(response.status)
     }
 })
+
+const deleteTask = async id =>{
+    const response = await fetch(`/api/tasks/${id}`, {
+        method: 'DELETE'
+    })
+ 
+    if(response.ok){
+        getTask()
+    }else{
+        console.log(response.status)
+    }
+}

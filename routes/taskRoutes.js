@@ -1,91 +1,96 @@
 import express from "express"
 import { backendTestTasks as tasks } from '../data.js'
 import { validationTask } from "../middleware/validationTask.js"
+import { query } from '../db.js'
 const router = express.Router()
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
 
-        if (req.query.completed !== undefined) {
-            const isCompleted = req.query.completed === 'true'
-            const task = tasks.filter(t => t.completed === isCompleted)
-            return res.json(task)
-        }
-
-        res.send(tasks)
+        const { rows } = await query('SELECT * from tasks ORDER BY id ASC')
+        res.json(rows)
     } catch (err) {
         next(err)
     }
 })
 
-router.post('/', validationTask, (req, res, next) => {
+// POST a new task into database
+router.post('/', async (req, res, next) => {
     try {
-        const newTask = {
-            id: Date.now(),
-            task: req.body.task,
-            description: req.body.description,
-            completed: req.body.completed || false
-        }
-        tasks.push(newTask)
-        res.status(201).json(newTask)
-    } catch (err) {
-        next(err)
-    }
-})
+        const { task, description } = req.body;
+        
+        const sql = `
+            INSERT INTO tasks (task, description) 
+            VALUES ($1, $2) 
+            RETURNING *
+        `;
+        const values = [task, description || ''];
 
-router.get('/:id', (req, res, next) => {
+        const { rows } = await query(sql, values);
+        res.status(201).json(rows[0]);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// GET a single task by ID
+router.get('/:id', async (req, res, next) => {
     try {
-        const tasksId = Number(req.params.id)
+        const { id } = req.params;
+        const { rows } = await query('SELECT * FROM tasks WHERE id = $1', [id]);
 
-        if (isNaN(tasksId)) {
-            const error = new Error("Task ID must be a valid number");
-            error.status = 400; // Bad Request
-            return next(error); // 🔴 Sends 400 error to your global errorHandler!
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Task not found' });
         }
 
-        const task = tasks.find(t => t.id === tasksId)
-
-        if (!task) {
-            return res.status(404).json({ error: 'Task not found' })
-        }
-        res.json(task)
+        res.json(rows[0]);
     } catch (err) {
-        next(err)
+        next(err);
     }
-})
+});
 
-router.delete('/:id', (req, res, next) => {
+// DELETE a task by ID
+router.delete('/:id', async (req, res, next) => {
     try {
-        const taskId = Number(req.params.id)
-        const taskIndex = tasks.findIndex(t => t.id === taskId)
+        const { id } = req.params;
+        const { rowCount } = await query('DELETE FROM tasks WHERE id = $1', [id]);
 
-        if (taskIndex === -1) {
-            return res.status(404).json({ error: 'Task not found' })
+        if (rowCount === 0) {
+            return res.status(404).json({ error: 'Task not found' });
         }
 
-        tasks.splice(taskIndex, 1)
-        res.json({ message: 'Task deleted successfully' })
+        res.json({ message: 'Task deleted successfully', id: Number(id) });
     } catch (err) {
-        next(err)
+        next(err);
     }
-})
+});
 
-router.put('/:id', validationTask, (req, res, next) => {
+// UPDATE a task by ID
+router.put('/:id', async (req, res, next) => {
     try {
-        const taskId = Number(req.params.id)
-        const taskIndex = tasks.findIndex(t => t.id === taskId)
+        const { id } = req.params;
+        const { task, description, completed } = req.body;
 
-        if (taskIndex === -1) {
-            return res.status(404).json({ error: 'Task not found' })
+        const sql = `
+            UPDATE tasks 
+            SET task = COALESCE($1, task),
+                description = COALESCE($2, description),
+                completed = COALESCE($3, completed)
+            WHERE id = $4
+            RETURNING *
+        `;
+        const values = [task, description, completed, id];
+
+        const { rows } = await query(sql, values);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Task not found' });
         }
 
-        // Merge old task data with updated fields from req.body
-        tasks[taskIndex] = { ...tasks[taskIndex], ...req.body }
-
-        res.json(tasks[taskIndex])
+        res.json(rows[0]);
     } catch (err) {
-        next(err)
+        next(err);
     }
-})
+});
 
 export default router

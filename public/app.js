@@ -14,6 +14,11 @@ taskList.addEventListener('click', event => {
         const task = event.target.dataset.task
         const desc = event.target.dataset.description
         editTask(id, task, desc)
+    } else if (event.target.classList.contains('task-checkbox')) {
+        const id = event.target.dataset.id
+        const isCompleted = event.target.checked
+    
+        toggleTaskStatus(id, isCompleted)
     }
 })
 
@@ -26,7 +31,7 @@ const getTask = async () => {
         const li = document.createElement('li')
 
         li.innerHTML = `
-    <input type="checkbox" class="task-checkbox" ${data.completed ? 'checked' : ''}>
+    <input type="checkbox" class="task-checkbox" ${data.completed ? 'checked' : ''} data-id="${data.id}">
     
     <div class="task-text">
         <h3 class="${data.completed ? 'completed' : ''}">${data.task}</h3>
@@ -88,7 +93,7 @@ taskForm.addEventListener('submit', async event => {
             taskInput.value = ''
             taskDesc.value = ''
             getTask()
-        }else{
+        } else {
             console.log(response.status)
         }
     }
@@ -111,4 +116,23 @@ const editTask = (id, task, desc) => {
     taskInput.value = task
     taskDesc.value = desc
     currentlyEditedId = id
+}
+
+const toggleTaskStatus = async (id, done) =>{
+    
+    const response = await fetch(`/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+            completed: done
+        })
+    })
+
+    if(response.ok){
+        getTask()
+    }else{
+        console.log(response.status)
+    }
 }
